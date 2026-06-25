@@ -1,8 +1,8 @@
 # Trekking Management Application
 
-This is my MAD1 project for the IITM BS program.
+This is my MAD1 project for managing trekking activities.
 
-The application will help manage trekking activities with three main roles:
+## Roles
 
 - Admin
 - Trek Staff

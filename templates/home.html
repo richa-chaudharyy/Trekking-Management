@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="hero-title">Welcome to Trekking Management Application</h1>
+
+                <p class="hero-text">
+                    This application helps manage treks, staff, users and bookings.
+                </p>
+
+                <div class="mt-4">
+                    <a href="{{ url_for('login') }}" class="btn btn-dark me-2">Login</a>
+                    <a href="{{ url_for('register') }}" class="btn btn-success me-2">Register</a>
+                    <a href="{{ url_for('about') }}" class="btn btn-outline-dark">About Project</a>
+                </div>
+            </div>
+
+            <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                <div class="hero-card">
+                    <h4>Trekking System</h4>
+                    <p>Manage treks, staff, and bookings in one place.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container mt-5">
+    <div class="text-center mb-4">
+        <h2>Main Features</h2>
+        <p class="text-muted">Features planned for the trekking system</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="feature-card">
+                <h5>Browse Treks</h5>
+                <p>Users can view open treks with details like location, difficulty, duration, and slots.</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="feature-card">
+                <h5>Easy Booking</h5>
+                <p>Users can book available treks and view their booking status later.</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="feature-card">
+                <h5>Staff Management</h5>
+                <p>Admin can manage trek staff and assign staff members to treks.</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="feature-card">
+                <h5>Trek History</h5>
+                <p>The system will maintain booking and trekking history for users and the admin.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container trek-section mt-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h3>How the Application Works</h3>
+            <p>
+                This application will connect three main roles: Admin, Trek Staff, and User.
+                Admin manages the system, staff manages assigned treks, and users book treks.
+            </p>
+        </div>
+
+        <div class="col-md-6">
+            <div class="info-box">
+                <p class="mb-1"><strong>Admin:</strong> Manages treks, users, staff, and bookings.</p>
+                <p class="mb-1"><strong>Staff:</strong> Updates assigned trek status and participants.</p>
+                <p class="mb-0"><strong>User:</strong> Browses and books available treks.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

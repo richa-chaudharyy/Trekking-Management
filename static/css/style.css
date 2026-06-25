@@ -1,0 +1,65 @@
+body {
+    background-color: #f5f7f4;
+    color: #222;
+    font-family: Arial, sans-serif;
+}
+
+.hero-section {
+    padding: 80px 0;
+    background: linear-gradient(120deg, #dfeee3, #f8f9fa);
+}
+
+.hero-title {
+    font-size: 42px;
+    font-weight: 700;
+}
+
+.hero-text {
+    font-size: 18px;
+    max-width: 650px;
+    margin-top: 15px;
+}
+
+.hero-card {
+    background-color: white;
+    padding: 45px 25px;
+    border-radius: 18px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card,
+.role-card,
+.info-box,
+.workflow-box {
+    background-color: white;
+    padding: 22px;
+    border-radius: 12px;
+    height: 100%;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card h5,
+.role-card h5 {
+    font-weight: 700;
+}
+
+.trek-section {
+    background-color: #eaf3ec;
+    padding: 35px;
+    border-radius: 15px;
+}
+
+.page-header {
+    padding: 60px 0;
+    background-color: #eaf3ec;
+}
+
+.workflow-box p {
+    margin-bottom: 10px;
+}
+
+.footer-section {
+    background-color: #212529;
+    color: white;
+    padding: 18px 0;
+}

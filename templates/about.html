@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container text-center">
+        <h1>About the Project</h1>
+        <p class="lead">A simple Trekking Management Application built for MAD1.</p>
+    </div>
+</section>
+
+<section class="container mt-5">
+    <h3>Project Overview</h3>
+
+    <p>
+        The Trekking Management Application is a web-based system for managing trekking
+        activities. It helps keep trek details, staff assignments, user bookings, and booking
+        history in one place.
+    </p>
+
+    <p>
+        The project uses Flask for backend routing, SQLite for storing data, SQLAlchemy for
+        database handling, Jinja templates for pages, and Bootstrap for simple responsive UI.
+    </p>
+</section>
+
+<section class="container mt-5">
+    <h3>Main Roles</h3>
+
+    <div class="row g-4 mt-2">
+        <div class="col-md-4">
+            <div class="role-card">
+                <h5>Admin</h5>
+                <p>Admin manages treks, users, staff, staff approval, and booking records.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="role-card">
+                <h5>Trek Staff</h5>
+                <p>Staff manages only assigned treks and views participants for those treks.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="role-card">
+                <h5>User / Trekker</h5>
+                <p>Users can register, browse open treks, book treks, and view their history.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container mt-5">
+    <h3>Basic Workflow</h3>
+
+    <div class="workflow-box">
+        <p>Admin creates and manages treks.</p>
+        <p>Admin approves trek staff and assigns staff to treks.</p>
+        <p>Users browse open treks and make bookings.</p>
+        <p>Staff manages assigned treks and participant details.</p>
+        <p>Booking and trek history is stored for future reference.</p>
+    </div>
+</section>
+
+{% endblock %}

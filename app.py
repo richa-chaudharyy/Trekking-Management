@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, flash, redirect, url_for
 from werkzeug.security import generate_password_hash
 from models import db, User
 
@@ -33,7 +33,24 @@ def create_admin():
 
 @app.route("/")
 def home():
-    return "Trekking Management Application is running."
+    return render_template("home.html")
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@app.route("/login")
+def login():
+    flash("Login page will be added later", "info")
+    return redirect(url_for("home"))
+
+
+@app.route("/register")
+def register():
+    flash("Registration page will be added later", "info")
+    return redirect(url_for("home"))
 
 
 if __name__ == "__main__":
