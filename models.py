@@ -17,7 +17,7 @@ class User(db.Model):
 
     bookings = db.relationship("Booking", backref="user", lazy=True)
     staff_profile = db.relationship("StaffProfile", backref="user", uselist=False, lazy=True)
-    assigned_treks = db.relationship("Trek", backref="staff", lazy=True)
+    assigned_treks = db.relationship("Trek", backref="assigned_staff", lazy=True)
 
     def __repr__(self):
         return f"<User {self.email}>"
