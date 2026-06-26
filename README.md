@@ -2,7 +2,7 @@
 
 This is my MAD1 project for managing trekking activities.
 
-## Roles
+## Main Roles
 
 - Admin
 - Trek Staff
