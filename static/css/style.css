@@ -4,6 +4,13 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.navbar-logo {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    margin-right: 10px;
+}
+
 .hero-section {
     padding: 80px 0;
     background: linear-gradient(120deg, #dfeee3, #f8f9fa);
@@ -22,7 +29,7 @@ body {
 
 .hero-card {
     background-color: white;
-    padding: 45px 25px;
+    padding: 38px 18px;
     border-radius: 18px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
@@ -36,11 +43,18 @@ body {
     border-radius: 12px;
     height: 100%;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transition: 0.3s ease;
 }
 
 .feature-card h5,
 .role-card h5 {
     font-weight: 700;
+}
+
+.feature-card:hover,
+.role-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.11);
 }
 
 .trek-section {
@@ -61,5 +75,38 @@ body {
 .footer-section {
     background-color: #212529;
     color: white;
-    padding: 18px 0;
+    padding: 25px 0;
+}
+
+.footer-title {
+    font-size: 18px;
+}
+
+.footer-small-line {
+    font-size: 14px;
+    color: #d6d6d6;
+}
+
+.footer-line {
+    width: 70%;
+    margin: 0 auto 14px;
+    border: none;
+    border-top: 1px solid #787e83;
+}
+
+.footer-text-links {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    font-size: 14px;
+}
+
+.footer-text-links span {
+    color: #d6d6d6;
+}
+
+.footer-copy {
+    font-size: 13px;
+    color: #bfbfbf;
 }

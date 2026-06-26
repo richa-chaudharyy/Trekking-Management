@@ -4,23 +4,28 @@
 
 <section class="page-header">
     <div class="container text-center">
-        <h1>About the Project</h1>
-        <p class="lead">A simple Trekking Management Application built for MAD1.</p>
+        <h1 class="mb-3">About the Project</h1>
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-9">
+                <p class="lead mb-0">A simple Trekking Management Application built for MAD1, designed to make trek browsing, booking, and management easier.</p>
+            </div>
+        </div>
     </div>
 </section>
 
 <section class="container mt-5">
-    <h3>Project Overview</h3>
+    <h3 class="mb-4">Project Overview</h3>
 
     <p>
-        The Trekking Management Application is a web-based system for managing trekking
-        activities. It helps keep trek details, staff assignments, user bookings, and booking
-        history in one place.
+        The Trekking Management Application is a web-based system for managing trekking activities in one place. It helps users browse available treks, check important trek details, book their slots, and view their booking history whenever needed.
     </p>
 
     <p>
-        The project uses Flask for backend routing, SQLite for storing data, SQLAlchemy for
-        database handling, Jinja templates for pages, and Bootstrap for simple responsive UI.
+        For the admin, the system makes it easier to manage trek details, users, trek staff, staff approval, and booking records. Trek staff can manage only the treks assigned to them and view participant details for those treks.
+    </p>
+
+    <p>
+        The project uses Flask for backend routing, SQLite for storing data, SQLAlchemy for database handling, Jinja templates for rendering pages, and Bootstrap for creating a simple responsive user interface.
     </p>
 </section>
 
@@ -31,35 +36,35 @@
         <div class="col-md-4">
             <div class="role-card">
                 <h5>Admin</h5>
-                <p>Admin manages treks, users, staff, staff approval, and booking records.</p>
+                <p>The admin controls the main system activities. Admin can create and manage treks, manage users, approve trek staff, assign staff members to treks, and view booking records.</p>
             </div>
         </div>
 
         <div class="col-md-4">
             <div class="role-card">
                 <h5>Trek Staff</h5>
-                <p>Staff manages only assigned treks and views participants for those treks.</p>
+                <p>Trek staff helps in handling trek-related work after approval from the admin. Staff can manage assigned treks, update trek status, and view participant details for those specific treks.</p>
             </div>
         </div>
 
         <div class="col-md-4">
             <div class="role-card">
                 <h5>User / Trekker</h5>
-                <p>Users can register, browse open treks, book treks, and view their history.</p>
+                <p>Users can register on the application, browse open treks, check trek details like location, difficulty, duration, and slots, book available treks, and view their booking history.</p>
             </div>
         </div>
     </div>
 </section>
 
 <section class="container mt-5">
-    <h3>Basic Workflow</h3>
+    <h3 class="mb-4">Basic Workflow</h3>
 
     <div class="workflow-box">
-        <p>Admin creates and manages treks.</p>
-        <p>Admin approves trek staff and assigns staff to treks.</p>
-        <p>Users browse open treks and make bookings.</p>
-        <p>Staff manages assigned treks and participant details.</p>
-        <p>Booking and trek history is stored for future reference.</p>
+        <p>Admin first creates trek records with details such as location, difficulty, duration, available slots, and trek status.</p>
+        <p>Admin approves trek staff and assigns staff members to specific treks so that they can manage only their assigned treks.</p>
+        <p>Users browse open treks, choose a trek based on their interest, and make bookings if slots are available.</p>
+        <p>Trek staff manages assigned treks, updates trek information when needed, and checks participant details.</p>
+        <p>Booking records and trek history are stored in the system so users and admin can refer to them later.</p>
     </div>
 </section>
 
