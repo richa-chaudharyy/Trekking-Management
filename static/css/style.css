@@ -57,6 +57,10 @@ body {
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.11);
 }
 
+.info-box {
+    font-size: 17px;
+}
+
 .trek-section {
     background-color: #eaf3ec;
     padding: 35px;
