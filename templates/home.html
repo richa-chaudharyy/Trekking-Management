@@ -12,6 +12,11 @@
                     Ready for your next adventure? Explore open treks, book your spot, and start your journey with us.
                 </p>
 
+                <p class="hero-text">
+                    Discover beautiful mountains, breathe fresh air, and enjoy amazing views far away from the busy city.
+                    Pick your next adventure and book your perfect trek today!
+                </p>
+
                 <div class="mt-4 d-flex flex-wrap gap-2">
                     <a href="{{ url_for('login') }}" class="btn btn-dark">Login</a>
                     <a href="{{ url_for('register') }}" class="btn btn-success">Register</a>
@@ -19,10 +24,9 @@
                 </div>
             </div>
 
-            <div class="col-lg-5 text-center mt-4 mt-lg-0">
+            <div class="col-lg-5 mt-4 mt-lg-0">
                 <div class="hero-card">
-                    <h4 class="mb-3">Peak Adventures</h4>
-                    <p>Discover beautiful mountains, breathe fresh air, and enjoy amazing views far away from the busy city. Pick your next adventure and book your perfect trek today!</p>
+                    <img  src="{{ url_for('static', filename='images/home_page.jpg') }}" alt="Mountain trekking view" class="hero-card-img">
                 </div>
             </div>
         </div>
@@ -66,7 +70,7 @@
     </div>
 </section>
 
-<section class="container trek-section mt-5">
+<section class="container trek-section my-5">
     <div class="row align-items-center">
         <div class="col-md-6">
             <h3>How Your Trek Journey Works</h3>

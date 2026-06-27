@@ -14,19 +14,23 @@
 </section>
 
 <section class="container mt-5">
-    <h3 class="mb-4">Project Overview</h3>
+    <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+            <h3 class="mb-4">Project Overview</h3>
 
-    <p>
-        The Trekking Management Application is a web-based system for managing trekking activities in one place. It helps users browse available treks, check important trek details, book their slots, and view their booking history whenever needed.
-    </p>
+            <p> The Trekking Management Application is a web-based system for managing trekking activities in one place. It helps users browse available treks, check important trek details, book their slots, and view their booking history whenever needed.</p>
 
-    <p>
-        For the admin, the system makes it easier to manage trek details, users, trek staff, staff approval, and booking records. Trek staff can manage only the treks assigned to them and view participant details for those treks.
-    </p>
+            <p>For the admin, the system makes it easier to manage trek details, users, trek staff, staff approval, and booking records. Trek staff can manage only the treks assigned to them and view participant details for those treks.</p>
 
-    <p>
-        The project uses Flask for backend routing, SQLite for storing data, SQLAlchemy for database handling, Jinja templates for rendering pages, and Bootstrap for creating a simple responsive user interface.
-    </p>
+            <p>The project uses Flask for backend routing, SQLite for storing data, SQLAlchemy for database handling, Jinja templates for rendering pages, and Bootstrap for creating a simple responsive user interface.</p>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="about-image-card shadow rounded-4 overflow-hidden">
+                <img src="{{ url_for('static', filename='images/about_page.jpg') }}" alt="Trekking view" class="about-card-img">
+            </div>
+        </div>
+    </div>
 </section>
 
 <section class="container mt-5">
@@ -56,7 +60,7 @@
     </div>
 </section>
 
-<section class="container mt-5">
+<section class="container my-5">
     <h3 class="mb-4">Basic Workflow</h3>
 
     <div class="workflow-box">
