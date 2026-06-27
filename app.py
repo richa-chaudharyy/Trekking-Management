@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for
+from flask import Flask, render_template, flash, redirect, url_for, request
 from werkzeug.security import generate_password_hash
 from models import db, User
 
@@ -41,16 +41,18 @@ def about():
     return render_template("about.html")
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    flash("Login page will be added later", "info")
-    return redirect(url_for("home"))
+    if request.method == "POST":
+        flash("Login backend logic will be added later", "info")
+    return render_template("login.html")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    flash("Registration page will be added later", "info")
-    return redirect(url_for("home"))
+    if request.method == "POST":
+        flash("Registration backend logic will be added later", "info")
+    return render_template("register.html")
 
 
 if __name__ == "__main__":
