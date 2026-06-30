@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h2>Admin Dashboard</h2>
+    <p>Welcome, {{ session.get("name") }}</p>
+
+    <div class="row g-3 mt-3">
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Total Users</h5>
+                <p>{{ total_users }}</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Total Staff</h5>
+                <p>{{ total_staff }}</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Total Treks</h5>
+                <p>{{ total_treks }}</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Total Bookings</h5>
+                <p>{{ total_bookings }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
