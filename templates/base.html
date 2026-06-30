@@ -25,19 +25,49 @@
             </button>
 
             <div class="collapse navbar-collapse" id="mainNavbar">
+                
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('about') }}">About App</a>
-                    </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                        <a class="nav-link" href="{{ url_for('about') }}">About Project</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
-                    </li>
+                    {% if session.get("user_id") %}
+
+                        {% if session.get("role") == "admin" %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                            </li>
+                        
+                        {% elif session.get("role") == "staff" %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('staff_dashboard') }}">Dashboard</a>
+                            </li>
+
+                        {% elif session.get("role") == "user" %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('user_dashboard') }}">Dashboard</a>
+                            </li>
+                        
+                        {% endif %}
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                        </li>
+                    
+                    {% else %}
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                        </li>
+
+                    {% endif %}    
                 </ul>
+
             </div>
         </div>
     </nav>
