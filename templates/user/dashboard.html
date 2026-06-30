@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h2>User Dashboard</h2>
+    <p>Welcome, {{ session.get("name") }}</p>
+    <p>Available treks and bookings will appear here later.</p>
+</div>
+{% endblock %}
