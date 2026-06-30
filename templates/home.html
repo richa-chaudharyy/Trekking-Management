@@ -17,15 +17,32 @@
                     Pick your next adventure and book your perfect trek today!
                 </p>
 
-                <div class="mt-4 d-flex flex-wrap gap-2">
-                    <a href="{{ url_for('login') }}" class="btn btn-dark">Login</a>
-                    <a href="{{ url_for('register') }}" class="btn btn-success">Register</a>
-                    <a href="{{ url_for('about') }}" class="btn btn-outline-dark">About App</a>
+                <div class="row g-3 mt-3">
+                    <div class="col-sm-4">
+                        <div class="bg-white rounded-3 shadow-sm p-3 h-100 hero-card-text">
+                            <h6 class="fw-bold mb-1">1. Explore</h6>
+                            <p class="small text-muted mb-0">View available treks with basic details.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="bg-white rounded-3 shadow-sm p-3 h-100  hero-card-text">
+                            <h6 class="fw-bold mb-1">2. Book</h6>
+                            <p class="small text-muted mb-0">Choose a trek and reserve your spot.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="bg-white rounded-3 shadow-sm p-3 h-100  hero-card-text">
+                            <h6 class="fw-bold mb-1">3. Track</h6>
+                            <p class="small text-muted mb-0">Check booking status and trek history.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="col-lg-5 mt-4 mt-lg-0">
-                <div class="hero-card">
+                <div class="hero-card shadow-lg">
                     <img  src="{{ url_for('static', filename='images/home_page.jpg') }}" alt="Mountain trekking view" class="hero-card-img">
                 </div>
             </div>
