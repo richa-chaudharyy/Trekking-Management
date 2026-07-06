@@ -17,7 +17,7 @@ class User(db.Model):
 
     bookings = db.relationship("Booking", backref="user", lazy=True)
     staff_profile = db.relationship("StaffProfile", backref="user", uselist=False, lazy=True)
-    assigned_treks = db.relationship("Trek", backref="assigned_staff", lazy=True)
+    assigned_treks = db.relationship("Trek", back_populates="assigned_staff", lazy=True)
 
     def __repr__(self):
         return f"<User {self.email}>"
@@ -44,11 +44,12 @@ class Trek(db.Model):
     duration = db.Column(db.Integer, nullable=False)
     available_slots = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String(20), nullable=False, default="Pending")
-    start_date = db.Column(db.Date)
-    end_date = db.Column(db.Date)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
     description = db.Column(db.Text)
-    assigned_staff_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    assigned_staff_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
 
+    assigned_staff = db.relationship("User", back_populates="assigned_treks")
     bookings = db.relationship("Booking", backref="trek", lazy=True)
 
     def __repr__(self):

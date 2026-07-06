@@ -1,9 +1,50 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <div class="container py-5">
-    <h2>User Dashboard</h2>
-    <p>Welcome, {{ session.get("name") }}</p>
-    <p>Available treks and bookings will appear here later.</p>
+    <div class="mb-4">
+        <h2 class="fw-bold mb-1">User Dashboard</h2>
+        <p class="text-muted mb-0">Welcome, {{ name }}. You can explore, manage and book you treks.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card dashboard-card dashboard-action-card h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold">Browse Treks</h5>
+                    <p class="text-muted">
+                        View open treks and choose the one you want to book.
+                    </p>
+                    <a href="{{ url_for('user_treks') }}" class="btn btn-success">Browse Treks</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card dashboard-card dashboard-action-card h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold">My Bookings</h5>
+                    <p class="text-muted">
+                        Check your current trek bookings and booking status.
+                    </p>
+                    <a href="{{ url_for('user_bookings') }}" class="btn btn-success">View Bookings</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card dashboard-card dashboard-action-card h-100">
+                <div class="card-body">
+                    <h5 class="fw-bold">Trek History</h5>
+                    <p class="text-muted">
+                        View your past, completed, or cancelled trek records.
+                    </p>
+                    <a href="{{ url_for('user_history') }}" class="btn btn-success">View History</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 {% endblock %}

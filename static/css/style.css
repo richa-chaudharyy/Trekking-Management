@@ -208,3 +208,43 @@ body {
 .about-image-card, .hero-card-text {
     transition: 0.3s ease;
 }
+
+.dashboard-card {
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-number {
+    font-size: 36px;
+    font-weight: 700;
+    color: #198754;
+}
+
+.dashboard-action-card {
+    min-height: 210px;
+}
+
+.trek-table th {
+    white-space: nowrap;
+}
+
+.action-form {
+    display: inline-block;
+    margin-left: 4px;
+}
+
+.form-card {
+    border: none;
+    border-radius: 16px;
+}
+
+.description-box {
+    min-height: 120px;
+}

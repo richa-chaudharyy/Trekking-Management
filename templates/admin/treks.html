@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Manage Treks</h2>
+            <p class="text-muted mb-0">View, edit, and manage all treks from here.</p>
+        </div>
+
+        <a href="{{ url_for('add_trek') }}" class="btn btn-success">
+            Add Trek
+        </a>
+    </div>
+
+    <div class="card dashboard-card">
+        <div class="card-body">
+            {% if treks %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle trek-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Location</th>
+                                <th>Difficulty</th>
+                                <th>Duration</th>
+                                <th>Slots</th>
+                                <th>Status</th>
+                                <th>Assigned Staff</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for trek in treks %}
+                            <tr>
+                                <td>{{ trek.id }}</td>
+                                <td class="fw-semibold">{{ trek.name }}</td>
+                                <td>{{ trek.location }}</td>
+                                <td>{{ trek.difficulty }}</td>
+                                <td>{{ trek.duration }} days</td>
+                                <td>{{ trek.available_slots }}</td>
+
+                                <td>
+                                    {% if trek.status == "Open" %}
+                                        <span class="badge bg-success">{{ trek.status }}</span>
+                                    {% elif trek.status == "Closed" %}
+                                        <span class="badge bg-danger">{{ trek.status }}</span>
+                                    {% elif trek.status == "Completed" %}
+                                        <span class="badge bg-secondary">{{ trek.status }}</span>
+                                    {% elif trek.status == "Ongoing" or trek.status == "Started" %}
+                                        <span class="badge bg-primary">{{ trek.status }}</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">{{ trek.status }}</span>
+                                    {% endif %}
+                                </td>
+
+                                <!-- <td>
+                                    {{ staff_names.get(trek.assigned_staff_id, "Not assigned") }}
+                                </td> -->
+
+                                <td style="min-width: 280px;">
+                                    <div class="small text-muted mb-1">
+                                        Current: {{ staff_names.get(trek.assigned_staff_id, "Not assigned") }}
+                                    </div>
+
+                                    <form action="{{ url_for('assign_staff_to_trek', trek_id=trek.id) }}" method="POST" class="d-flex gap-2">
+                                        <select name="assigned_staff_id" class="form-select form-select-sm">
+                                            <option value="">No staff</option>
+
+                                            {% for staff in approved_staff %}
+                                                <option value="{{ staff.id }}"
+                                                    {% if trek.assigned_staff_id == staff.id %}selected{% endif %}>
+                                                    {{ staff.name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+
+                                        <button type="submit" class="btn btn-sm btn-outline-success">
+                                            Save
+                                        </button>
+                                    </form>
+                                </td>
+
+                                <td>
+                                    <a href="{{ url_for('edit_trek', trek_id=trek.id) }}" class="btn btn-sm btn-outline-primary">
+                                        Edit
+                                    </a>
+
+                                    <form action="{{ url_for('delete_trek', trek_id=trek.id) }}" method="POST" class="action-form">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <h5 class="fw-bold">No treks added yet</h5>
+                    <p class="text-muted">Start by adding your first trek.</p>
+                    <a href="{{ url_for('add_trek') }}" class="btn btn-success">Add Trek</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

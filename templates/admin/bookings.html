@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">All Bookings</h2>
+            <p class="text-muted mb-0">View booking records and trek history.</p>
+        </div>
+
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <div class="card dashboard-card">
+        <div class="card-body">
+            {% if bookings %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>User Name</th>
+                                <th>Trek Name</th>
+                                <th>Booking Date</th>
+                                <th>Booking Status</th>
+                                <th>Payment Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for booking in bookings %}
+                            <tr>
+                                <td>{{ booking.id }}</td>
+
+                                <td>
+                                    {% if booking.user %}
+                                        {{ booking.user.name }}
+                                    {% else %}
+                                        Not available
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if booking.trek %}
+                                        {{ booking.trek.name }}
+                                    {% else %}
+                                        Not available
+                                    {% endif %}
+                                </td>
+
+                                <td>{{ booking.booking_date }}</td>
+
+                                <td>
+                                    {% if booking.booking_status == "Booked" %}
+                                        <span class="badge bg-success">Booked</span>
+                                    {% elif booking.booking_status == "Cancelled" %}
+                                        <span class="badge bg-danger">Cancelled</span>
+                                    {% elif booking.booking_status == "Completed" %}
+                                        <span class="badge bg-primary">Completed</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ booking.booking_status }}</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-light text-dark border">
+                                        {{ booking.payment_status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <h5 class="fw-bold">No bookings found</h5>
+                    <p class="text-muted mb-0">Booking records will appear here after users book treks.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

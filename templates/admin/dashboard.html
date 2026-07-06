@@ -1,38 +1,73 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <div class="container py-5">
-    <h2>Admin Dashboard</h2>
-    <p>Welcome, {{ session.get("name") }}</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Admin Dashboard</h2>
+            <p class="text-muted mb-0">Welcome, {{ name }}. It's good to see you back.</p>
+        </div>
 
-    <div class="row g-3 mt-3">
+        <span class="badge bg-success px-3 py-2">Admin</span>
+    </div>
+
+    <div class="row g-4">
         <div class="col-md-3">
-            <div class="card p-3">
-                <h5>Total Users</h5>
-                <p>{{ total_users }}</p>
+            <div class="card dashboard-card text-center h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Total Users</p>
+                    <h3 class="dashboard-number">{{ total_users }}</h3>
+                </div>
             </div>
         </div>
 
         <div class="col-md-3">
-            <div class="card p-3">
-                <h5>Total Staff</h5>
-                <p>{{ total_staff }}</p>
+            <div class="card dashboard-card text-center h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Total Staff</p>
+                    <h3 class="dashboard-number">{{ total_staff }}</h3>
+                </div>
             </div>
         </div>
 
         <div class="col-md-3">
-            <div class="card p-3">
-                <h5>Total Treks</h5>
-                <p>{{ total_treks }}</p>
+            <div class="card dashboard-card text-center h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Total Treks</p>
+                    <h3 class="dashboard-number">{{ total_treks }}</h3>
+                </div>
             </div>
         </div>
 
         <div class="col-md-3">
-            <div class="card p-3">
-                <h5>Total Bookings</h5>
-                <p>{{ total_bookings }}</p>
+            <div class="card dashboard-card text-center h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Total Bookings</p>
+                    <h3 class="dashboard-number">{{ total_bookings }}</h3>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="card mt-4 dashboard-card">
+        <div class="card-body">
+            <h5 class="fw-bold mb-3">Admin Work</h5>
+
+            <div class="d-flex flex-wrap gap-3">
+                <a href="{{ url_for('admin_treks') }}" class="btn btn-outline-success">View Treks</a>
+                <a href="{{ url_for('add_trek') }}" class="btn btn-success">Add Trek</a>
+                <a href="{{ url_for('admin_staff') }}" class="btn btn-outline-success">Manage Staff</a>
+                <a href="{{ url_for('admin_users') }}" class="btn btn-outline-success">Manage Users</a>
+                <a href="{{ url_for('admin_bookings') }}" class="btn btn-outline-success">Bookings</a>
+                <a href="{{ url_for('admin_search') }}" class="btn btn-outline-success">Search Records</a>
+            </div>
+
+            <p class="text-muted small mt-3 mb-0">
+                Use these options to manage treks, staff, users, bookings, and search records.
+            </p>
+        </div>
+    </div>
 </div>
+
 {% endblock %}

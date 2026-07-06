@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Search Records</h2>
+            <p class="text-muted mb-0">Search users, staff, and treks from one place.</p>
+        </div>
+
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <div class="card dashboard-card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('admin_search') }}">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label">Search Type</label>
+                        <select name="search_type" class="form-select" required>
+                            <option value="">Select type</option>
+                            <option value="users" {% if search_type == "users" %}selected{% endif %}>Users</option>
+                            <option value="staff" {% if search_type == "staff" %}selected{% endif %}>Staff</option>
+                            <option value="treks" {% if search_type == "treks" %}selected{% endif %}>Treks</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Keyword</label>
+                        <input type="text" name="keyword" class="form-control" required
+                               value="{{ keyword }}" placeholder="Search by ID, name, email, or location">
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-success w-100">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if searched %}
+
+        {% if search_type == "users" %}
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">User Results</h5>
+
+                    {% if users %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.id }}</td>
+                                        <td>{{ user.name }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.phone_number if user.phone_number else "-" }}</td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                {{ user.status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No users found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if search_type == "staff" %}
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Staff Results</h5>
+
+                    {% if staff %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for member in staff %}
+                                    <tr>
+                                        <td>{{ member.id }}</td>
+                                        <td>{{ member.name }}</td>
+                                        <td>{{ member.email }}</td>
+                                        <td>{{ member.phone_number if member.phone_number else "-" }}</td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                {{ member.status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No staff found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if search_type == "treks" %}
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Trek Results</h5>
+
+                    {% if treks %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Location</th>
+                                        <th>Difficulty</th>
+                                        <th>Duration</th>
+                                        <th>Slots</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for trek in treks %}
+                                    <tr>
+                                        <td>{{ trek.id }}</td>
+                                        <td>{{ trek.name }}</td>
+                                        <td>{{ trek.location }}</td>
+                                        <td>{{ trek.difficulty }}</td>
+                                        <td>{{ trek.duration }} days</td>
+                                        <td>{{ trek.available_slots }}</td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                {{ trek.status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No treks found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+    {% else %}
+        <div class="text-center text-muted py-4">
+            Search records using the form above.
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

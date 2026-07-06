@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="mb-4">
+        <h2 class="fw-bold mb-1">Edit Trek</h2>
+        <p class="text-muted mb-0">Update trek details, slots, dates, and status.</p>
+    </div>
+
+    <div class="card dashboard-card form-card">
+        <div class="card-body">
+            <form method="POST">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Trek Name</label>
+                        <input type="text" name="name" class="form-control" required value="{{ trek.name }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Location</label>
+                        <input type="text" name="location" class="form-control" required value="{{ trek.location }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Difficulty</label>
+                        <select name="difficulty" class="form-select" required>
+                            {% for difficulty in difficulty_options %}
+                                <option value="{{ difficulty }}"
+                                    {% if trek.difficulty == difficulty %}selected{% endif %}>
+                                    {{ difficulty }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select" required>
+                            {% for status in status_options %}
+                                <option value="{{ status }}"
+                                    {% if trek.status == status %}selected{% endif %}>
+                                    {{ status }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Assign Staff</label>
+                        <select name="assigned_staff_id" class="form-select">
+                            <option value="">No staff assigned</option>
+
+                            {% for staff in approved_staff %}
+                                <option value="{{ staff.id }}"
+                                    {% if trek.assigned_staff_id == staff.id %}selected{% endif %}>
+                                    {{ staff.name }} - {{ staff.email }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text">
+                            Only approved staff members are shown here.
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Duration</label>
+                        <input type="number" name="duration" class="form-control" min="1" required value="{{ trek.duration }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Available Slots</label>
+                        <input type="number" name="available_slots" class="form-control" min="0" required value="{{ trek.available_slots }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" name="start_date" class="form-control" required
+                               value="{{ trek.start_date.isoformat() if trek.start_date else '' }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">End Date</label>
+                        <input type="date" name="end_date" class="form-control" required
+                               value="{{ trek.end_date.isoformat() if trek.end_date else '' }}">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control description-box">{{ trek.description or '' }}</textarea>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-success">Update Trek</button>
+                    <a href="{{ url_for('admin_treks') }}" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

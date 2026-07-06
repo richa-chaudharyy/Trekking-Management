@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Manage Users</h2>
+            <p class="text-muted mb-0">View users and manage account status.</p>
+        </div>
+
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <div class="card dashboard-card">
+        <div class="card-body">
+            {% if users %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.phone_number if user.phone_number else "-" }}</td>
+                                <td>
+                                    <span class="badge bg-secondary text-capitalize">
+                                        {{ user.role }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    {% if user.status == "active" %}
+                                        <span class="badge bg-success">Active</span>
+                                    {% elif user.status == "blacklisted" %}
+                                        <span class="badge bg-danger">Blacklisted</span>
+                                    {% elif user.status == "pending" %}
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ user.status }}</span>
+                                    {% endif %}
+                                </td>
+
+                                <td class="text-end">
+                                    {% if user.role == "admin" %}
+                                        <button class="btn btn-sm btn-outline-secondary" disabled>
+                                            Admin account
+                                        </button>
+
+                                    {% elif user.status == "blacklisted" %}
+                                        <form action="{{ url_for('reactivate_user', user_id=user.id) }}" method="POST" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                Reactivate
+                                            </button>
+                                        </form>
+
+                                    {% else %}
+                                        <form action="{{ url_for('blacklist_user', user_id=user.id) }}" method="POST" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                Blacklist
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted mb-0">No users found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
