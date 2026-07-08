@@ -248,3 +248,76 @@ body {
 .description-box {
     min-height: 120px;
 }
+
+.empty-state-box {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 35px 20px;
+}
+
+.page-content {
+    padding: 28px 0 38px;
+}
+
+.footer-section {
+    margin-top: auto;
+}
+
+.staff-dashboard-wrap {
+    max-width: 1050px;
+}
+
+.action-card {
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.empty-dashboard-box {
+    background-color: #f8f9fa;
+    border-radius: 14px;
+    padding: 32px 20px;
+}
+
+.staff-profile-wrap {
+    max-width: 1050px;
+}
+
+.profile-avatar {
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    background-color: #198754;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.profile-side-info {
+    background-color: #f8f9fa;
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 10px;
+}
+
+.profile-detail-item {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px 10px;
+    text-align: center;
+}
+
+.profile-detail-label {
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.profile-detail-value {
+    color: #212529;
+    font-weight: 500;
+    word-break: break-word;
+}

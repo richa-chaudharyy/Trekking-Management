@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="container py-5">
+<div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold mb-1">Manage Treks</h2>
@@ -56,10 +56,6 @@
                                         <span class="badge bg-warning text-dark">{{ trek.status }}</span>
                                     {% endif %}
                                 </td>
-
-                                <!-- <td>
-                                    {{ staff_names.get(trek.assigned_staff_id, "Not assigned") }}
-                                </td> -->
 
                                 <td style="min-width: 280px;">
                                     <div class="small text-muted mb-1">

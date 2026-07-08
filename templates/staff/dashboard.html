@@ -2,80 +2,160 @@
 
 {% block content %}
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-9">
-            <div class="card dashboard-card">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div>
-                            <h2 class="fw-bold mb-1">Staff Dashboard</h2>
-                            <p class="text-muted mb-0">Welcome, {{ name }}. It's good to see you here.</p>
-                        </div>
+{% set open_count = namespace(value=0) %}
+{% for trek in assigned_treks %}
+    {% if trek.status == "Open" %}
+        {% set open_count.value = open_count.value + 1 %}
+    {% endif %}
+{% endfor %}
 
-                        <span class="badge bg-success px-3 py-2">Approved Staff</span>
+<div class="container">
+    <div class="staff-dashboard-wrap mx-auto">
+
+        <div class="card dashboard-card mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                    <div>
+                        <h2 class="fw-bold mb-1">Staff Dashboard</h2>
+                        <p class="text-muted mb-0">
+                            Welcome, {{ name }}. Manage your assigned treks from here.
+                        </p>
                     </div>
 
-                    <div class="alert alert-success mb-4">
-                        Your staff account is approved. You can access staff features.
-                    </div>
-
-                    <div class="card border-0 bg-light">
-                        <div class="card-body">
-                            <h5 class="fw-bold mb-3">Assigned Treks</h5>
-
-                            {% if assigned_treks %}
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover align-middle mb-0">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Trek Name</th>
-                                                <th>Location</th>
-                                                <th>Difficulty</th>
-                                                <th>Status</th>
-                                                <th>Slots</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            {% for trek in assigned_treks %}
-                                                <tr>
-                                                    <td>{{ trek.id }}</td>
-                                                    <td>{{ trek.name }}</td>
-                                                    <td>{{ trek.location }}</td>
-                                                    <td>{{ trek.difficulty }}</td>
-                                                    <td>
-                                                        <span class="badge bg-success">
-                                                            {{ trek.status }}
-                                                        </span>
-                                                    </td>
-                                                    <td>{{ trek.available_slots }}</td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            {% else %}
-                                <p class="text-muted mb-0">
-                                    No treks assigned yet.
-                                </p>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="mt-4 d-flex flex-wrap gap-3">
-                        <a href="#" class="btn btn-outline-success disabled">Manage Assigned Treks</a>
-                        <a href="#" class="btn btn-outline-success disabled">View Participants</a>
-                    </div>
-
-                    <p class="text-muted small mt-3 mb-0">
-                        These will work later.
-                    </p>
-
+                    <span class="badge bg-success px-3 py-2">
+                        Approved Staff
+                    </span>
                 </div>
             </div>
         </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body p-4">
+                        <p class="text-muted mb-2">Total Assigned Treks</p>
+                        <h3 class="fw-bold mb-0">{{ assigned_trek_count }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body p-4">
+                        <p class="text-muted mb-2">Open Treks</p>
+                        <h3 class="fw-bold mb-0">{{ open_count.value }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body p-4">
+                        <p class="text-muted mb-2">Account Status</p>
+                        <h5 class="fw-bold text-success mb-0">Active</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="card action-card h-100">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-2">Assigned Trek Management</h5>
+                        <p class="text-muted mb-3">
+                            Update available slots and trek status for the treks assigned to you.
+                        </p>
+
+                        <a href="{{ url_for('staff_assigned_treks') }}" class="btn btn-success">
+                            Manage Assigned Treks
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card action-card h-100">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-2">Staff Profile</h5>
+                        <p class="text-muted mb-3">
+                            Update your phone number and short staff bio.
+                        </p>
+
+                        <a href="{{ url_for('staff_profile') }}" class="btn btn-outline-primary">
+                            My Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card dashboard-card">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Assigned Treks Preview</h5>
+                        <p class="text-muted mb-0">
+                            A quick view of treks currently assigned to you.
+                        </p>
+                    </div>
+
+                    {% if assigned_treks %}
+                        <a href="{{ url_for('staff_assigned_treks') }}" class="btn btn-outline-success btn-sm">
+                            Manage All
+                        </a>
+                    {% endif %}
+                </div>
+
+                {% if assigned_treks %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Trek Name</th>
+                                    <th>Location</th>
+                                    <th>Difficulty</th>
+                                    <th>Status</th>
+                                    <th>Slots</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for trek in assigned_treks %}
+                                    <tr>
+                                        <td>{{ trek.id }}</td>
+                                        <td class="fw-semibold">{{ trek.name }}</td>
+                                        <td>{{ trek.location }}</td>
+                                        <td>{{ trek.difficulty }}</td>
+                                        <td>
+                                            {% if trek.status == "Open" %}
+                                                <span class="badge bg-success">{{ trek.status }}</span>
+                                            {% elif trek.status == "Closed" %}
+                                                <span class="badge bg-secondary">{{ trek.status }}</span>
+                                            {% elif trek.status == "Completed" %}
+                                                <span class="badge bg-dark">{{ trek.status }}</span>
+                                            {% else %}
+                                                <span class="badge bg-info text-dark">{{ trek.status }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ trek.available_slots }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="empty-dashboard-box text-center">
+                        <h6 class="fw-semibold mb-2">No assigned treks yet</h6>
+                        <p class="text-muted mb-3">
+                            Once admin assigns a trek to you, it will appear here.
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
     </div>
 </div>
 

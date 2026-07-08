@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="staff-profile-wrap mx-auto">
+        <div class="row g-4 align-items-stretch">
+            <div class="col-lg-4">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body p-4 text-center">
+                        <div class="profile-avatar mx-auto mb-3">
+                            {{ user.name[0]|upper }}
+                        </div>
+
+                        <h4 class="fw-bold mb-1">Staff Account</h4>
+                        <p class="text-muted mb-3">
+                            Basic account information
+                        </p>
+
+                        <span class="badge bg-success px-3 py-2 mb-4">
+                            {{ user.status|title }} Staff
+                        </span>
+
+                        <div class="profile-side-info">
+                            <div class="profile-detail-item mb-3">
+                                <p class="profile-detail-label mb-1">Email</p>
+                                <p class="profile-detail-value mb-0">{{ user.email }}</p>
+                            </div>
+
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <div class="profile-detail-item">
+                                        <p class="profile-detail-label mb-1">Role</p>
+                                        <p class="profile-detail-value mb-0">{{ user.role|title }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="profile-detail-item">
+                                        <p class="profile-detail-label mb-1">Status</p>
+                                        <p class="profile-detail-value mb-0">{{ user.status|title }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body p-4">
+
+                        <div class="mb-4">
+                            <h2 class="fw-bold mb-1">Edit Profile</h2>
+                            <p class="text-muted mb-0">
+                                Update your name, phone number, and short staff bio.
+                            </p>
+                        </div>
+
+                        <form method="POST">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Name</label>
+                                    <input type="text"
+                                           name="name"
+                                           class="form-control"
+                                           value="{{ user.name }}"
+                                           required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text"
+                                           name="phone_number"
+                                           class="form-control"
+                                           value="{{ user.phone_number or '' }}"
+                                           minlength="10"
+                                           maxlength="10"
+                                           pattern="[0-9]{10}"
+                                           required>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label">Bio</label>
+                                    <textarea name="bio"
+                                              class="form-control"
+                                              rows="4"
+                                              placeholder="Write a short staff bio">{{ profile.bio or '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-light border mt-4 mb-0">
+                                Email, role, and account status cannot be changed.
+                            </div>
+
+                            <div class="d-flex gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Update Profile
+                                </button>
+
+                                <a href="{{ url_for('staff_dashboard') }}" class="btn btn-outline-secondary">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

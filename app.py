@@ -112,6 +112,18 @@ def admin_required(func):
     return wrapper
 
 
+def staff_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        access_check = check_access("staff")
+
+        if access_check:
+            return access_check
+
+        return func(*args, **kwargs)
+    return wrapper
+
+
 DIFFICULTY_OPTIONS = ["Easy", "Moderate", "Hard"]
 
 TREK_STATUS_OPTIONS = ["Pending", "Approved", "Open", "Closed", "Started", "Ongoing", "Completed"]
@@ -183,6 +195,18 @@ def validate_trek_form(form):
     }
 
     return errors, trek_data
+
+
+def get_active_staff():
+    if "user_id" not in session or session.get("role") != "staff":
+        return None
+
+    staff = User.query.get(session["user_id"])
+
+    if not staff or staff.status != "active":
+        return None
+
+    return staff
 
 
 @app.route("/")
@@ -262,6 +286,10 @@ def register():
         if not phone_number:
             flash("Phone number is required", "danger")
             return redirect(url_for("register"))
+        
+        if not phone_number.isdigit() or len(phone_number) != 10:
+            flash("Phone number must be exactly 10 digits.", "danger")
+            return redirect(url_for("register"))
 
         if role not in ["staff", "user"]:
             flash("Invalid role selected", "danger")
@@ -327,12 +355,8 @@ def logout():
 
 
 @app.route("/admin/dashboard")
+@admin_required
 def admin_dashboard():
-    access_check = check_access("admin")
-
-    if access_check:
-        return access_check
-
     total_users = User.query.filter_by(role="user").count()
     total_staff = User.query.filter_by(role="staff").count()
     total_treks = Trek.query.count()
@@ -751,15 +775,155 @@ def admin_search():
 
 
 @app.route("/staff/dashboard")
+@staff_required
 def staff_dashboard():
-    access_check = check_access("staff")
-
-    if access_check:
-        return access_check
-    
     assigned_treks = Trek.query.filter_by(assigned_staff_id=session.get("user_id")).order_by(Trek.id.desc()).all()
 
-    return render_template("staff/dashboard.html", name=session.get("name"), assigned_treks=assigned_treks)
+    assigned_trek_count = len(assigned_treks)
+
+    return render_template("staff/dashboard.html", name=session.get("name"), assigned_treks=assigned_treks, assigned_trek_count=assigned_trek_count)
+
+
+@app.route("/staff/assigned-treks")
+@staff_required
+def staff_assigned_treks():
+    staff_id = session.get("user_id")
+
+    assigned_treks = Trek.query.filter_by(assigned_staff_id=staff_id).order_by(Trek.id.desc()).all()
+
+    trek_data = []
+
+    for trek in assigned_treks:
+        booking_count = Booking.query.filter_by(
+            trek_id=trek.id,
+            booking_status="Booked"
+        ).count()
+
+        trek_data.append({
+            "trek": trek,
+            "booking_count": booking_count
+        })
+
+    allowed_statuses = ["Open", "Closed", "Started", "Ongoing", "Completed"]
+
+    return render_template(
+        "staff/assigned_treks.html",
+        trek_data=trek_data,
+        allowed_statuses=allowed_statuses
+    )
+
+
+@app.route("/staff/assigned-treks/<int:trek_id>/update", methods=["POST"])
+@staff_required
+def update_assigned_trek(trek_id):
+    staff_id = session.get("user_id")
+    trek = Trek.query.get_or_404(trek_id)
+
+    if trek.assigned_staff_id != staff_id:
+        flash("You can update only your assigned treks.", "danger")
+        return redirect(url_for("staff_assigned_treks"))
+
+    available_slots = request.form.get("available_slots", "").strip()
+    status = request.form.get("status", "").strip()
+
+    allowed_statuses = ["Open", "Closed", "Started", "Ongoing", "Completed"]
+
+    if not available_slots.isdigit():
+        flash("Slots must be a valid number.", "danger")
+        return redirect(url_for("staff_assigned_treks"))
+
+    available_slots = int(available_slots)
+
+    if available_slots < 0:
+        flash("Slots cannot be negative.", "danger")
+        return redirect(url_for("staff_assigned_treks"))
+
+    if status not in allowed_statuses:
+        flash("Invalid trek status selected.", "danger")
+        return redirect(url_for("staff_assigned_treks"))
+
+    trek.available_slots = available_slots
+    trek.status = status
+
+    db.session.commit()
+
+    flash("Trek updated successfully.", "success")
+    return redirect(url_for("staff_assigned_treks"))
+
+
+@app.route("/staff/participants/<int:trek_id>")
+@staff_required
+def staff_participants(trek_id):
+    staff = get_active_staff()
+
+    if not staff:
+        flash("Please login as active staff to access this page.", "danger")
+        return redirect(url_for("login"))
+
+    trek = Trek.query.get_or_404(trek_id)
+
+    if trek.assigned_staff_id != staff.id:
+        flash("You are not allowed to view participants of this trek.", "danger")
+        return redirect(url_for("staff_assigned_treks"))
+
+    bookings = Booking.query.filter_by(trek_id=trek.id).order_by(Booking.booking_date.desc()).all()
+
+    return render_template(
+        "staff/participants.html",
+        trek=trek,
+        bookings=bookings
+    )
+
+
+@app.route("/staff/profile", methods=["GET", "POST"])
+@staff_required
+def staff_profile():
+    staff = get_active_staff()
+
+    if not staff:
+        flash("Please login as active staff to access this page.", "danger")
+        return redirect(url_for("login"))
+
+    profile = StaffProfile.query.filter_by(user_id=staff.id).first()
+
+    if not profile:
+        profile = StaffProfile(user_id=staff.id)
+        db.session.add(profile)
+        db.session.commit()
+
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        phone_number = request.form.get("phone_number", "").strip()
+        bio = request.form.get("bio", "").strip()
+
+        if not name:
+            flash("Name cannot be empty.", "danger")
+            return redirect(url_for("staff_profile"))
+        
+        if not phone_number:
+            flash("Phone number cannot be empty.", "danger")
+            return redirect(url_for("staff_profile"))
+
+        if not phone_number.isdigit() or len(phone_number) != 10:
+            flash("Phone number must be exactly 10 digits.", "danger")
+            return redirect(url_for("staff_profile"))
+
+        staff.name = name
+        staff.phone_number = phone_number
+        profile.bio = bio
+
+        db.session.commit()
+
+        session["name"] = staff.name
+
+        flash("Profile updated successfully.", "success")
+        return redirect(url_for("staff_profile"))
+
+    return render_template(
+        "staff/profile.html",
+        user=staff,
+        profile=profile
+    )
 
 
 @app.route("/user/dashboard")

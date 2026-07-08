@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="mb-4">
+        <h2 class="fw-bold mb-1">Assigned Treks</h2>
+        <p class="text-muted mb-0">Manage only the treks assigned to you.</p>
+    </div>
+
+    {% if trek_data %}
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Trek</th>
+                                <th>Location</th>
+                                <th>Difficulty</th>
+                                <th>Duration</th>
+                                <th>Registered Trekkers</th>
+                                <th>Slots</th>
+                                <th>Status</th>
+                                <th>Participants</th>
+                                <th>Update</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for item in trek_data %}
+                                {% set trek = item.trek %}
+
+                                <tr>
+                                    <td class="fw-semibold">{{ trek.name }}</td>
+                                    <td>{{ trek.location }}</td>
+                                    <td>{{ trek.difficulty }}</td>
+                                    <td>{{ trek.duration }} days</td>
+                                    <td>
+                                        <span class="badge bg-info text-dark">
+                                            {{ item.booking_count }}
+                                        </span>
+                                    </td>
+
+                                    <td style="max-width: 120px;">
+                                        <input type="number" name="available_slots" class="form-control form-control-sm" value="{{ trek.available_slots }}" min="0" required form="update-trek-{{ trek.id }}">
+                                    </td>
+
+                                    <td style="max-width: 160px;">
+                                        <select name="status" class="form-select form-select-sm" required form="update-trek-{{ trek.id }}">
+                                            {% for status in allowed_statuses %}
+                                                <option value="{{ status }}"
+                                                    {% if trek.status == status %}selected{% endif %}>
+                                                    {{ status }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <a href="{{ url_for('staff_participants', trek_id=trek.id) }}" class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        <form id="update-trek-{{ trek.id }}" method="POST" action="{{ url_for('update_assigned_trek', trek_id=trek.id) }}">
+                                            <button type="submit" class="btn btn-sm btn-primary">
+                                                Save
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="card dashboard-card mt-4">
+            <div class="card-body">
+                <div class="empty-state-box text-center">
+                    <h5 class="fw-semibold mb-2">No assigned treks yet</h5>
+                    <p class="text-muted mb-3">
+                        Once admin assigns a trek to you, it will appear here.
+                    </p>
+
+                    <a href="{{ url_for('staff_dashboard') }}" class="btn btn-outline-secondary">
+                        Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
