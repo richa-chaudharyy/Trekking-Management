@@ -71,14 +71,15 @@
 
                                 <div class="col-md-6">
                                     <label class="form-label">Phone</label>
-                                    <input type="text"
+                                    <input type="tel"
                                            name="phone_number"
                                            class="form-control"
                                            value="{{ user.phone_number or '' }}"
                                            minlength="10"
                                            maxlength="10"
                                            pattern="[0-9]{10}"
-                                           required>
+                                           required
+                                           inputmode="numeric">
                                 </div>
 
                                 <div class="col-12">

@@ -20,6 +20,20 @@ db.init_app(app)
 VALID_ROLES = ["admin", "staff", "user"]
 
 
+def is_valid_email(email):
+    if " " in email or email.count("@") != 1:
+        return False
+
+    local_part, domain = email.split("@")
+    domain_parts = domain.split(".")
+
+    return bool(
+        local_part
+        and len(domain_parts) >= 2
+        and all(domain_parts)
+    )
+
+
 def password_is_hashed(password):
     if not password:
         return False
@@ -228,6 +242,10 @@ def login():
         if not email or not password:
             flash("Email and password are required", "danger")
             return redirect(url_for("login"))
+        
+        if not is_valid_email(email):
+            flash("Please enter a valid email address.", "danger")
+            return redirect(url_for("login"))
 
         user = User.query.filter_by(email=email).first()
 
@@ -281,6 +299,10 @@ def register():
 
         if not email:
             flash("Email is required", "danger")
+            return redirect(url_for("register"))
+        
+        if not is_valid_email(email):
+            flash("Please enter a valid email address.", "danger")
             return redirect(url_for("register"))
         
         if not phone_number:
@@ -674,6 +696,10 @@ def blacklist_user(user_id):
     if user.role == "staff":
         flash("Staff accounts are managed from the staff page.", "warning")
         return redirect(url_for("admin_users"))
+    
+    if user.status != "active":
+        flash("Only active users can be blacklisted.", "warning")
+        return redirect(url_for("admin_users"))
 
     user.status = "blacklisted"
     db.session.commit()
@@ -693,6 +719,10 @@ def reactivate_user(user_id):
 
     if user.role == "staff":
         flash("Staff accounts are managed from the staff page.", "warning")
+        return redirect(url_for("admin_users"))
+    
+    if user.status != "blacklisted":
+        flash("Only blacklisted users can be reactivated.", "warning")
         return redirect(url_for("admin_users"))
 
     user.status = "active"
@@ -828,11 +858,11 @@ def update_assigned_trek(trek_id):
 
     allowed_statuses = ["Open", "Closed", "Started", "Ongoing", "Completed"]
 
-    if not available_slots.isdigit():
-        flash("Slots must be a valid number.", "danger")
+    try:
+        available_slots = int(available_slots)
+    except ValueError:
+        flash("Slots must be a whole number.", "danger")
         return redirect(url_for("staff_assigned_treks"))
-
-    available_slots = int(available_slots)
 
     if available_slots < 0:
         flash("Slots cannot be negative.", "danger")
@@ -946,8 +976,9 @@ def user_treks():
     search = request.args.get("search", "").strip()
     location = request.args.get("location", "").strip()
     difficulty = request.args.get("difficulty", "").strip()
+    today = date.today()
 
-    trek_query = Trek.query.filter(Trek.status == "Open")
+    trek_query = Trek.query.filter(Trek.status == "Open", Trek.start_date >= today)
 
     if search:
         trek_query = trek_query.filter(
@@ -968,7 +999,7 @@ def user_treks():
 
     location_rows = (
         db.session.query(Trek.location)
-        .filter(Trek.status == "Open")
+        .filter(Trek.status == "Open", Trek.start_date >= today)
         .distinct()
         .order_by(Trek.location.asc())
         .all()
@@ -1002,6 +1033,10 @@ def book_trek(trek_id):
 
     if trek.status != "Open":
         flash("This trek is not open for booking.", "warning")
+        return redirect(url_for("user_treks"))
+    
+    if trek.start_date < date.today():
+        flash("This trek has already started and cannot be booked.", "warning")
         return redirect(url_for("user_treks"))
 
     existing_booking = Booking.query.filter_by(
