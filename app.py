@@ -934,7 +934,7 @@ def user_dashboard():
         return access_check
 
     return render_template("user/dashboard.html", name=session.get("name"))
-    
+
 
 @app.route("/user/treks")
 def user_treks():
@@ -943,8 +943,102 @@ def user_treks():
     if access_check:
         return access_check
 
-    flash("Browse treks page will be added later.", "info")
-    return redirect(url_for("user_dashboard"))
+    search = request.args.get("search", "").strip()
+    location = request.args.get("location", "").strip()
+    difficulty = request.args.get("difficulty", "").strip()
+
+    trek_query = Trek.query.filter(Trek.status == "Open")
+
+    if search:
+        trek_query = trek_query.filter(
+            Trek.name.ilike(f"%{search}%")
+        )
+
+    if location:
+        trek_query = trek_query.filter(
+            Trek.location == location
+        )
+
+    if difficulty in ["Easy", "Moderate", "Hard"]:
+        trek_query = trek_query.filter(
+            Trek.difficulty == difficulty
+        )
+
+    treks = trek_query.order_by(Trek.start_date.asc()).all()
+
+    location_rows = (
+        db.session.query(Trek.location)
+        .filter(Trek.status == "Open")
+        .distinct()
+        .order_by(Trek.location.asc())
+        .all()
+    )
+
+    locations = [row[0] for row in location_rows]
+
+    return render_template(
+        "user/browse_treks.html",
+        treks=treks,
+        locations=locations,
+        search=search,
+        selected_location=location,
+        selected_difficulty=difficulty
+    )
+
+
+@app.route("/user/book/<int:trek_id>", methods=["POST"])
+def book_trek(trek_id):
+    access_check = check_access("user")
+
+    if access_check:
+        return access_check
+
+    user = User.query.get(session["user_id"])
+    trek = Trek.query.get(trek_id)
+
+    if trek is None:
+        flash("Trek not found.", "danger")
+        return redirect(url_for("user_treks"))
+
+    if trek.status != "Open":
+        flash("This trek is not open for booking.", "warning")
+        return redirect(url_for("user_treks"))
+
+    existing_booking = Booking.query.filter_by(
+        user_id=user.id,
+        trek_id=trek.id,
+        booking_status="Booked"
+    ).first()
+
+    if existing_booking:
+        flash("You have already booked this trek.", "warning")
+        return redirect(url_for("user_treks"))
+
+    if trek.available_slots <= 0:
+        trek.status = "Closed"
+        db.session.commit()
+
+        flash("No slots are available for this trek.", "warning")
+        return redirect(url_for("user_treks"))
+
+    booking = Booking(
+        user_id=user.id,
+        trek_id=trek.id,
+        booking_status="Booked",
+        payment_status="not_required"
+    )
+
+    db.session.add(booking)
+
+    trek.available_slots = trek.available_slots - 1
+
+    if trek.available_slots == 0:
+        trek.status = "Closed"
+
+    db.session.commit()
+
+    flash("Trek booked successfully.", "success")
+    return redirect(url_for("user_bookings"))
 
 
 @app.route("/user/bookings")
@@ -954,8 +1048,67 @@ def user_bookings():
     if access_check:
         return access_check
 
-    flash("Bookings page will be added later.", "info")
-    return redirect(url_for("user_dashboard"))
+    today = date.today()
+
+    booked_records = Booking.query.filter_by(
+        user_id=session["user_id"],
+        booking_status="Booked"
+    ).order_by(Booking.booking_date.desc()).all()
+
+    bookings = []
+
+    for booking in booked_records:
+        if (
+            booking.trek.status != "Completed"
+            and booking.trek.end_date >= today
+        ):
+            bookings.append(booking)
+
+    return render_template("user/bookings.html", bookings=bookings, today=today)
+
+
+@app.route("/user/cancel-booking/<int:booking_id>", methods=["POST"])
+def cancel_booking(booking_id):
+    access_check = check_access("user")
+
+    if access_check:
+        return access_check
+
+    booking = Booking.query.filter_by(
+        id=booking_id,
+        user_id=session["user_id"]
+    ).first()
+
+    if not booking:
+        flash("Booking not found.", "danger")
+        return redirect(url_for("user_bookings"))
+
+    if booking.booking_status != "Booked":
+        flash("This booking is already cancelled or completed.", "warning")
+        return redirect(url_for("user_bookings"))
+
+    trek = booking.trek
+
+    if trek.status in ["Started", "Ongoing", "Completed"]:
+        flash("This booking can no longer be cancelled.", "warning")
+        return redirect(url_for("user_bookings"))
+
+    if trek.end_date < date.today():
+        flash("Past trek bookings cannot be cancelled.", "warning")
+        return redirect(url_for("user_bookings"))
+
+    was_full = trek.available_slots == 0
+
+    booking.booking_status = "Cancelled"
+    trek.available_slots += 1
+
+    if was_full and trek.status == "Closed":
+        trek.status = "Open"
+
+    db.session.commit()
+
+    flash("Booking cancelled successfully.", "success")
+    return redirect(url_for("user_bookings"))
 
 
 @app.route("/user/history")
@@ -965,8 +1118,68 @@ def user_history():
     if access_check:
         return access_check
 
-    flash("History page will be added later.", "info")
-    return redirect(url_for("user_dashboard"))
+    today = date.today()
+
+    all_bookings = Booking.query.filter_by(
+        user_id=session["user_id"]
+    ).order_by(Booking.booking_date.desc()).all()
+
+    history_bookings = []
+
+    for booking in all_bookings:
+        if (
+            booking.booking_status in ["Cancelled", "Completed"]
+            or booking.trek.status == "Completed"
+            or booking.trek.end_date < today
+        ):
+            history_bookings.append(booking)
+
+    return render_template(
+        "user/history.html",
+        bookings=history_bookings,
+        today=today
+    )
+
+
+@app.route("/user/profile", methods=["GET", "POST"])
+def user_profile():
+    access_check = check_access("user")
+
+    if access_check:
+        return access_check
+
+    user = User.query.get(session["user_id"])
+
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        phone_number = request.form.get("phone_number", "").strip()
+
+        if not name:
+            flash("Name cannot be empty.", "danger")
+            return redirect(url_for("user_profile"))
+
+        if not phone_number:
+            flash("Phone number cannot be empty.", "danger")
+            return redirect(url_for("user_profile"))
+
+        if not phone_number.isdigit() or len(phone_number) != 10:
+            flash("Phone number must be exactly 10 digits.", "danger")
+            return redirect(url_for("user_profile"))
+
+        user.name = name
+        user.phone_number = phone_number
+
+        db.session.commit()
+
+        session["name"] = user.name
+
+        flash("Profile updated successfully.", "success")
+        return redirect(url_for("user_profile"))
+
+    return render_template(
+        "user/profile.html",
+        user=user
+    )
 
 
 if __name__ == "__main__":

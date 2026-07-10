@@ -3,47 +3,132 @@
 {% block content %}
 
 <div class="container">
-    <div class="mb-4">
-        <h2 class="fw-bold mb-1">User Dashboard</h2>
-        <p class="text-muted mb-0">Welcome, {{ name }}. You can explore, manage and book your treks.</p>
-    </div>
+    <div class="user-dashboard-wrap mx-auto">
 
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card dashboard-card dashboard-action-card h-100">
-                <div class="card-body">
-                    <h5 class="fw-bold">Browse Treks</h5>
-                    <p class="text-muted">
-                        View open treks and choose the one you want to book.
-                    </p>
-                    <a href="{{ url_for('user_treks') }}" class="btn btn-success">Browse Treks</a>
+        <div class="card dashboard-card user-welcome-card mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                    <div>
+                        <h2 class="fw-bold mb-1">
+                            Welcome, {{ name }}
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Find a trek, manage your bookings, and view your previous journeys.
+                        </p>
+                    </div>
+
+                    <span class="badge bg-success-subtle text-success px-3 py-2">
+                        User Account
+                    </span>
+
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card dashboard-card dashboard-action-card h-100">
-                <div class="card-body">
-                    <h5 class="fw-bold">My Bookings</h5>
-                    <p class="text-muted">
-                        Check your current trek bookings and booking status.
-                    </p>
-                    <a href="{{ url_for('user_bookings') }}" class="btn btn-success">View Bookings</a>
+        <div class="mb-3">
+            <h4 class="fw-bold mb-1">Quick Actions</h4>
+
+            <p class="text-muted mb-0">
+                Choose what you want to do.
+            </p>
+        </div>
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card dashboard-card user-action-card h-100">
+                    <div class="card-body p-4 d-flex flex-column">
+
+                        <div class="user-action-number mb-3">
+                            01
+                        </div>
+
+                        <h5 class="fw-bold mb-2">Browse Treks</h5>
+
+                        <p class="text-muted flex-grow-1">
+                            Search open treks by name, location, and difficulty.
+                        </p>
+
+                        <a href="{{ url_for('user_treks') }}"
+                           class="btn btn-success align-self-start">
+                            Browse Treks
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card dashboard-card user-action-card h-100">
+                    <div class="card-body p-4 d-flex flex-column">
+
+                        <div class="user-action-number mb-3">
+                            02
+                        </div>
+
+                        <h5 class="fw-bold mb-2">My Bookings</h5>
+
+                        <p class="text-muted flex-grow-1">
+                            View your current trek bookings and cancel a booking when allowed.
+                        </p>
+
+                        <a href="{{ url_for('user_bookings') }}"
+                           class="btn btn-outline-success align-self-start">
+                            View Bookings
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card dashboard-card user-action-card h-100">
+                    <div class="card-body p-4 d-flex flex-column">
+
+                        <div class="user-action-number mb-3">
+                            03
+                        </div>
+
+                        <h5 class="fw-bold mb-2">Trek History</h5>
+
+                        <p class="text-muted flex-grow-1">
+                            View your completed, cancelled, and previous trek records.
+                        </p>
+
+                        <a href="{{ url_for('user_history') }}"
+                           class="btn btn-outline-success align-self-start">
+                            View History
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card dashboard-card user-profile-strip">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                    <div>
+                        <h5 class="fw-bold mb-1">Profile Settings</h5>
+
+                        <p class="text-muted mb-0">
+                            Keep your name and phone number updated.
+                        </p>
+                    </div>
+
+                    <a href="{{ url_for('user_profile') }}"
+                       class="btn btn-outline-primary">
+                        Update Profile
+                    </a>
+
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card dashboard-card dashboard-action-card h-100">
-                <div class="card-body">
-                    <h5 class="fw-bold">Trek History</h5>
-                    <p class="text-muted">
-                        View your past, completed, or cancelled trek records.
-                    </p>
-                    <a href="{{ url_for('user_history') }}" class="btn btn-success">View History</a>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 

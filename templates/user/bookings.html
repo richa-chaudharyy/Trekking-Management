@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">My Bookings</h2>
+            <p class="text-muted mb-0">
+                View your current trek bookings and cancel them when allowed.
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('user_treks') }}" class="btn btn-outline-success">
+                Browse Treks
+            </a>
+
+            <a href="{{ url_for('user_history') }}" class="btn btn-success">
+                Booking History
+            </a>
+        </div>
+    </div>
+
+    {% if bookings %}
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Trek</th>
+                                <th>Location</th>
+                                <th>Booking Date</th>
+                                <th>Trek Dates</th>
+                                <th>Booking Status</th>
+                                <th>Trek Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for booking in bookings %}
+                                <tr>
+                                    <td class="fw-semibold">
+                                        {{ booking.trek.name }}
+                                    </td>
+
+                                    <td>
+                                        {{ booking.trek.location }}
+                                    </td>
+
+                                    <td>
+                                        {{ booking.booking_date.strftime("%d %b %Y") }}
+                                    </td>
+
+                                    <td>
+                                        {{ booking.trek.start_date.strftime("%d %b %Y") }}
+                                        -
+                                        {{ booking.trek.end_date.strftime("%d %b %Y") }}
+                                    </td>
+
+                                    <td>
+                                        <span class="badge bg-success">
+                                            {{ booking.booking_status }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        {% if booking.trek.status == "Open" %}
+                                            <span class="badge bg-success">
+                                                {{ booking.trek.status }}
+                                            </span>
+                                        {% elif booking.trek.status == "Closed" %}
+                                            <span class="badge bg-secondary">
+                                                {{ booking.trek.status }}
+                                            </span>
+                                        {% elif booking.trek.status in ["Started", "Ongoing"] %}
+                                            <span class="badge bg-warning text-dark">
+                                                {{ booking.trek.status }}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-primary">
+                                                {{ booking.trek.status }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if booking.booking_status == "Booked"
+                                                and booking.trek.status not in ["Started", "Ongoing", "Completed"]
+                                                and booking.trek.end_date >= today %}
+
+                                            <form method="POST"
+                                                action="{{ url_for('cancel_booking', booking_id=booking.id) }}">
+                                                <button type="submit"
+                                                        class="btn btn-outline-danger btn-sm">
+                                                    Cancel
+                                                </button>
+                                            </form>
+
+                                        {% else %}
+                                            <span class="text-muted">
+                                                Not Allowed
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="card dashboard-card">
+            <div class="card-body text-center py-5">
+                <h5 class="fw-bold mb-2">No Current Bookings</h5>
+
+                <p class="text-muted mb-3">
+                    You do not have any active trek bookings.
+                </p>
+
+                <a href="{{ url_for('user_treks') }}"
+                    class="btn btn-success">
+                    Browse Treks
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -264,7 +264,7 @@ body {
 }
 
 .staff-dashboard-wrap {
-    max-width: 1050px;
+    max-width: 1100px;
 }
 
 .action-card {
@@ -320,4 +320,123 @@ body {
     color: #212529;
     font-weight: 500;
     word-break: break-word;
+}
+
+.user-dashboard-wrap {
+    max-width: 1100px;
+}
+
+.user-welcome-card {
+    border-left: 5px solid #198754;
+}
+
+.user-action-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-action-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.09);
+}
+
+.user-action-number {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background-color: #e9f7ef;
+    color: #198754;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.user-profile-strip {
+    background-color: #f8f9fa;
+}
+
+.user-profile-wrap {
+    max-width: 1050px;
+}
+
+.admin-dashboard-wrap {
+    max-width: 1100px;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.table th,
+.table td {
+    padding: 14px 10px;
+    vertical-align: middle;
+}
+
+.table thead th {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    white-space: normal;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table .form-control,
+.table .form-select {
+    width: 100%;
+    min-width: 0;
+}
+
+.table .btn {
+    white-space: nowrap;
+}
+
+.trek-table {
+    font-size: 15px;
+}
+
+.staff-assignment-cell {
+    width: 250px;
+    min-width: 250px;
+}
+
+.staff-assignment-cell .form-select {
+    min-width: 150px;
+}
+
+.trek-actions-cell {
+    width: 150px;
+    min-width: 150px;
+    white-space: nowrap;
+}
+
+.assigned-trek-table {
+    font-size: 15px;
+}
+
+.assigned-trek-table .slots-cell {
+    width: 95px;
+}
+
+.assigned-trek-table .status-cell {
+    width: 145px;
+}
+
+.assigned-trek-table .small-action-cell {
+    width: 90px;
+    white-space: nowrap;
+}
+
+@media (max-width: 991px) {
+    .trek-table,
+    .assigned-trek-table {
+        min-width: 1000px;
+    }
 }

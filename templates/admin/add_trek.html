@@ -13,20 +13,34 @@
             <form method="POST">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label">Trek Name</label>
-                        <input type="text" name="name" class="form-control" required
-                               value="{{ form_data.get('name', '') }}">
+                        <label for="trek-name" class="form-label">Trek Name</label>
+                        <input 
+                            type="text" 
+                            name="name" 
+                            class="form-control"
+                            id="trek-name" 
+                            required
+                            value="{{ form_data.get('name', '') }}" 
+                            placeholder="e.g., Kedarkantha Trek"
+                        >
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Location</label>
-                        <input type="text" name="location" class="form-control" required
-                               value="{{ form_data.get('location', '') }}">
+                        <label for="location" class="form-label">Location</label>
+                        <input 
+                            type="text" 
+                            name="location" 
+                            class="form-control"
+                            id="location" 
+                            required
+                            value="{{ form_data.get('location', '') }}" 
+                            placeholder="e.g., Uttarakhand"
+                        >
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Difficulty</label>
-                        <select name="difficulty" class="form-select" required>
+                        <label for="difficulty" class="form-label">Difficulty</label>
+                        <select name="difficulty" class="form-select" id="difficulty" required>
                             <option value="">Select difficulty</option>
                             {% for difficulty in difficulty_options %}
                                 <option value="{{ difficulty }}"
@@ -38,8 +52,8 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Status</label>
-                        <select name="status" class="form-select" required>
+                        <label class="form-label" for="status">Status</label>
+                        <select name="status" class="form-select" id="status" required>
                             {% for status in status_options %}
                                 <option value="{{ status }}"
                                     {% if form_data.get('status', 'Pending') == status %}selected{% endif %}>
@@ -50,32 +64,66 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Duration</label>
-                        <input type="number" name="duration" class="form-control" min="1" required
-                               value="{{ form_data.get('duration', '') }}">
+                        <label class="form-label" for="duration">Duration</label>
+                        <input 
+                            type="number" 
+                            name="duration" 
+                            class="form-control" 
+                            id="duration"
+                            min="1" 
+                            required
+                            value="{{ form_data.get('duration', '') }}" 
+                            placeholder="e.g., 5"
+                        >
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Available Slots</label>
-                        <input type="number" name="available_slots" class="form-control" min="0" required
-                               value="{{ form_data.get('available_slots', '') }}">
+                        <label class="form-label" for="available-slots">Available Slots</label>
+                        <input 
+                            type="number" 
+                            name="available_slots" 
+                            class="form-control" 
+                            id="available-slots"
+                            min="0" 
+                            required
+                            value="{{ form_data.get('available_slots', '') }}" 
+                            placeholder="e.g., 20"
+                        >
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Start Date</label>
-                        <input type="date" name="start_date" class="form-control" required
-                               value="{{ form_data.get('start_date', '') }}">
+                        <label class="form-label" for="start-date">Start Date</label>
+                        <input 
+                            type="date" 
+                            name="start_date" 
+                            class="form-control" 
+                            id="start-date"
+                            required
+                            value="{{ form_data.get('start_date', '') }}"
+                        >
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">End Date</label>
-                        <input type="date" name="end_date" class="form-control" required
-                               value="{{ form_data.get('end_date', '') }}">
+                        <label class="form-label" for="end-date">End Date</label>
+                        <input 
+                            type="date" 
+                            name="end_date" 
+                            class="form-control" 
+                            id="end-date"
+                            required
+                            value="{{ form_data.get('end_date', '') }}"
+                        >
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label">Description</label>
-                        <textarea name="description" class="form-control description-box">{{ form_data.get('description', '') }}</textarea>
+                        <label for="description" class="form-label">Description</label>
+                        <textarea 
+                            id="description"
+                            name="description" 
+                            class="form-control description-box"
+                            rows="3"
+                            placeholder="Write a short description about the trek ..."
+                        >{{ form_data.get('description', '') }}</textarea>
                     </div>
                 </div>
 

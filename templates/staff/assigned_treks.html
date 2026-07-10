@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container-fluid px-4 px-xl-5">
     <div class="mb-4">
         <h2 class="fw-bold mb-1">Assigned Treks</h2>
         <p class="text-muted mb-0">Manage only the treks assigned to you.</p>
@@ -12,14 +12,14 @@
         <div class="card dashboard-card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle mb-0 assigned-trek-table">
                         <thead>
                             <tr>
                                 <th>Trek</th>
                                 <th>Location</th>
                                 <th>Difficulty</th>
                                 <th>Duration</th>
-                                <th>Registered Trekkers</th>
+                                <th>Trekkers</th>
                                 <th>Slots</th>
                                 <th>Status</th>
                                 <th>Participants</th>
@@ -42,11 +42,11 @@
                                         </span>
                                     </td>
 
-                                    <td style="max-width: 120px;">
+                                    <td class="slots-cell">
                                         <input type="number" name="available_slots" class="form-control form-control-sm" value="{{ trek.available_slots }}" min="0" required form="update-trek-{{ trek.id }}">
                                     </td>
 
-                                    <td style="max-width: 160px;">
+                                    <td class="status-cell">
                                         <select name="status" class="form-select form-select-sm" required form="update-trek-{{ trek.id }}">
                                             {% for status in allowed_statuses %}
                                                 <option value="{{ status }}"
@@ -57,13 +57,13 @@
                                         </select>
                                     </td>
 
-                                    <td>
+                                    <td class="small-action-cell">
                                         <a href="{{ url_for('staff_participants', trek_id=trek.id) }}" class="btn btn-sm btn-outline-primary">
                                             View
                                         </a>
                                     </td>
 
-                                    <td>
+                                    <td class="small-action-cell">
                                         <form id="update-trek-{{ trek.id }}" method="POST" action="{{ url_for('update_assigned_trek', trek_id=trek.id) }}">
                                             <button type="submit" class="btn btn-sm btn-primary">
                                                 Save

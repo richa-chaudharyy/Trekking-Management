@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Booking History</h2>
+            <p class="text-muted mb-0">
+                View your cancelled, completed, and past trek bookings.
+            </p>
+        </div>
+
+        <a href="{{ url_for('user_bookings') }}"
+            class="btn btn-outline-success">
+            My Bookings
+        </a>
+    </div>
+
+    {% if bookings %}
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Trek</th>
+                                <th>Location</th>
+                                <th>Booking Date</th>
+                                <th>Trek Dates</th>
+                                <th>Booking Status</th>
+                                <th>Trek Status</th>
+                                <th>History Type</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for booking in bookings %}
+                                <tr>
+                                    <td class="fw-semibold">
+                                        {{ booking.trek.name }}
+                                    </td>
+
+                                    <td>
+                                        {{ booking.trek.location }}
+                                    </td>
+
+                                    <td>
+                                        {{ booking.booking_date.strftime("%d %b %Y") }}
+                                    </td>
+
+                                    <td>
+                                        {{ booking.trek.start_date.strftime("%d %b %Y") }}
+                                        -
+                                        {{ booking.trek.end_date.strftime("%d %b %Y") }}
+                                    </td>
+
+                                    <td>
+                                        {% if booking.booking_status == "Cancelled" %}
+                                            <span class="badge bg-danger">
+                                                Cancelled
+                                            </span>
+                                        {% elif booking.booking_status == "Completed" %}
+                                            <span class="badge bg-primary">
+                                                Completed
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-success">
+                                                {{ booking.booking_status }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if booking.trek.status == "Completed" %}
+                                            <span class="badge bg-primary">
+                                                Completed
+                                            </span>
+                                        {% elif booking.trek.status == "Closed" %}
+                                            <span class="badge bg-secondary">
+                                                Closed
+                                            </span>
+                                        {% elif booking.trek.status in ["Started", "Ongoing"] %}
+                                            <span class="badge bg-warning text-dark">
+                                                {{ booking.trek.status }}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-success">
+                                                {{ booking.trek.status }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if booking.booking_status == "Cancelled" %}
+                                            <span class="text-danger fw-semibold">
+                                                Cancelled Booking
+                                            </span>
+                                        {% elif booking.booking_status == "Completed"
+                                                or booking.trek.status == "Completed" %}
+                                            <span class="text-primary fw-semibold">
+                                                Completed Trek
+                                            </span>
+                                        {% elif booking.trek.end_date < today %}
+                                            <span class="text-muted fw-semibold">
+                                                Past Trek
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="card dashboard-card">
+            <div class="card-body text-center py-5">
+                <h5 class="fw-bold mb-2">No Booking History</h5>
+
+                <p class="text-muted mb-3">
+                    Your cancelled and completed bookings will appear here.
+                </p>
+
+                <a href="{{ url_for('user_treks') }}"
+                   class="btn btn-success">
+                    Browse Treks
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
