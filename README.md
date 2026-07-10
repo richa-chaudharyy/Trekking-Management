@@ -16,3 +16,4 @@ This is my MAD1 project for managing trekking activities.
 - CSS
 - Bootstrap
 - SQLite
+- SQLAlchemy
