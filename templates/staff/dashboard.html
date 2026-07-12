@@ -188,6 +188,7 @@
                                     <th>Difficulty</th>
                                     <th>Status</th>
                                     <th>Slots</th>
+                                    <th>Trekkers</th>
                                 </tr>
                             </thead>
 
@@ -245,6 +246,10 @@
 
                                         <td>
                                             {{ trek.available_slots }}
+                                        </td>
+
+                                        <td>
+                                            {{ booking_counts.get(trek.id, 0) }}
                                         </td>
                                     </tr>
                                 {% endfor %}

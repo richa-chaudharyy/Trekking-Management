@@ -638,6 +638,12 @@ def edit_trek(trek_id):
         trek.description = trek_data["description"]
         trek.status = trek_data["status"]
 
+        if trek_data["status"] == "Completed":
+            bookings = Booking.query.filter_by(trek_id=trek.id, booking_status="Booked").all()
+
+            for booking in bookings:
+                booking.booking_status = "Completed"
+
         db.session.commit()
 
         flash("Trek updated successfully.", "success")
@@ -811,7 +817,12 @@ def staff_dashboard():
 
     assigned_trek_count = len(assigned_treks)
 
-    return render_template("staff/dashboard.html", name=session.get("name"), assigned_treks=assigned_treks, assigned_trek_count=assigned_trek_count)
+    booking_counts = {}
+
+    for trek in assigned_treks:
+        booking_counts[trek.id] = Booking.query.filter(Booking.trek_id == trek.id, Booking.booking_status.in_(["Booked", "Completed"])).count()
+
+    return render_template("staff/dashboard.html", name=session.get("name"), assigned_treks=assigned_treks, assigned_trek_count=assigned_trek_count, booking_counts=booking_counts)
 
 
 @app.route("/staff/assigned-treks")
@@ -824,10 +835,7 @@ def staff_assigned_treks():
     trek_data = []
 
     for trek in assigned_treks:
-        booking_count = Booking.query.filter_by(
-            trek_id=trek.id,
-            booking_status="Booked"
-        ).count()
+        booking_count = Booking.query.filter(Booking.trek_id==trek.id, Booking.booking_status.in_(["Booked", "Completed"])).count()
 
         trek_data.append({
             "trek": trek,
@@ -874,6 +882,12 @@ def update_assigned_trek(trek_id):
 
     trek.available_slots = available_slots
     trek.status = status
+
+    if status == "Completed":
+        bookings = Booking.query.filter_by(trek_id=trek.id, booking_status="Booked").all()
+
+        for booking in bookings:
+            booking.booking_status = "Completed"
 
     db.session.commit()
 
@@ -962,8 +976,16 @@ def user_dashboard():
 
     if access_check:
         return access_check
+    
+    today = date.today()
 
-    return render_template("user/dashboard.html", name=session.get("name"))
+    available_treks = Trek.query.filter(Trek.status == "Open", Trek.start_date >= today).count()
+
+    booked_treks = Booking.query.filter_by(user_id=session["user_id"], booking_status="Booked").count()
+
+    recent_bookings = Booking.query.filter_by(user_id=session["user_id"]).order_by(Booking.booking_date.desc()).limit(3).all()
+
+    return render_template("user/dashboard.html", name=session.get("name"), available_treks=available_treks, booked_treks=booked_treks, recent_bookings=recent_bookings)
 
 
 @app.route("/user/treks")
